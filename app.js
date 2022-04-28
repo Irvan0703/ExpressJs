@@ -2,6 +2,8 @@ require('./config/mongoose')
 const express = require('express');
 const app = express();
 const path = require('path');
+const productRouter = require('./app/products/routes');
+const productRouterV2 = require('./app/products_v2/routes');
 //const productRouterV3 = require('./app/products_v3/routes');
 //const productRouterV4 = require('./app/products_v4/routes');
 const logger = require('morgan');
@@ -17,6 +19,8 @@ app.use(router)
 app.use(cors());
 //app.use('/api/v1', productRouterV3);
 //app.use('/api/v2', productRouterV4);
+app.use('/api/v1', productRouter);
+app.use('/api/v2', productRouterV2);
 app.use((req,res, next) => {
     res.status(404);
     res.send({
