@@ -25,16 +25,27 @@ const view = (req, res) =>{
 }
 
 const store = (req, res) =>{
+    console.log(req.body)
     const {name, price, stock, status} = req.body;
+    
     const image = req.file;
+    console.log(image);
     if (image){
         const target = path.join(__dirname,'../../uploads',image.originalname);
         fs.renameSync(image.path,target);
         
         db.collection('products').insertOne({name, price, stock, status, image_url: `http://localhost:3000/public/${image.originalname}`})
-          .then(result => res.send(result))
+          .then(result => { 
+            res.send(result)
+        })
           .catch(error => res.send(error))
-    }   
+    } else {
+        db.collection('products').insertOne({name,price,stock,status,image_url:''})
+            .then(result => {
+                res.send(result); 
+            })
+            .catch(error => res.send(error))
+    }
 }
 
 const update = (req, res) =>{
